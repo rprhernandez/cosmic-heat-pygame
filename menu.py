@@ -5,6 +5,7 @@ import pygame
 import pygame.mixer
 
 from classes.constants import WIDTH, HEIGHT, BLACK, WHITE, RED
+from controls_screen import show_controls_screen
 
 
 def animate_screen():
@@ -38,8 +39,9 @@ logo_img = pygame.image.load('images/ch.png').convert_alpha()
 logo_x = (WIDTH - logo_img.get_width()) // 2
 logo_y = 50
 
-play_button_rect = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 - 25, 205, 50)
-quit_button_rect = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 50, 205, 50)
+play_button_rect     = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 - 50, 205, 50)
+controls_button_rect = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 25, 205, 50)
+quit_button_rect     = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 + 100, 205, 50)
 
 pygame.mixer.music.load('game_sounds/menu.mp3')
 pygame.mixer.music.play(-1)
@@ -69,15 +71,17 @@ while show_menu:
                 import main
                 main.main()
                 break
+            elif controls_button_rect.collidepoint(x, y):
+                show_controls_screen(screen, clock)
             elif quit_button_rect.collidepoint(x, y):
                 pygame.quit()
                 sys.exit()
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                selected_button = 0
+                selected_button = (selected_button - 1) % 3
             elif event.key == pygame.K_DOWN:
-                selected_button = 1
+                selected_button = (selected_button + 1) % 3
             elif event.key == pygame.K_RETURN:
                 if selected_button == 0:
                     explosion_sound.play()
@@ -88,6 +92,8 @@ while show_menu:
                     main.main()
                     break
                 elif selected_button == 1:
+                    show_controls_screen(screen, clock)
+                elif selected_button == 2:
                     pygame.quit()
                     sys.exit()
 
@@ -103,33 +109,46 @@ while show_menu:
                         main.main()
                         break
                     elif selected_button == 1:
+                        show_controls_screen(screen, clock)
+                    elif selected_button == 2:
                         pygame.quit()
                         sys.exit()
             elif event.type == pygame.JOYHATMOTION:
                 if event.value[1] == 1:
-                    selected_button = 0
+                    selected_button = (selected_button - 1) % 3
                 elif event.value[1] == -1:
-                    selected_button = 1
+                    selected_button = (selected_button + 1) % 3
 
     screen.blit(mainmenu_img, (0, 0))
 
     screen.blit(logo_img, (logo_x, logo_y))
 
     font = pygame.font.SysFont('Comic Sans MS', 40)
+
+    # Play button
     text = font.render("Play", True, WHITE)
     pygame.draw.rect(screen, BLACK, play_button_rect, border_radius=10)
     if selected_button == 0:
         pygame.draw.rect(screen, RED, play_button_rect, border_radius=10, width=4)
-    text_rect = text.get_rect()
-    text_rect.center = play_button_rect.center
+    text_rect = text.get_rect(center=play_button_rect.center)
     screen.blit(text, text_rect)
+
+    # Controls button
+    text = font.render("Controls", True, WHITE)
+    pygame.draw.rect(screen, BLACK, controls_button_rect, border_radius=10)
+    if selected_button == 1:
+        pygame.draw.rect(screen, RED, controls_button_rect, border_radius=10, width=4)
+    text_rect = text.get_rect(center=controls_button_rect.center)
+    screen.blit(text, text_rect)
+
+    # Exit button
     text = font.render("Exit", True, WHITE)
     pygame.draw.rect(screen, BLACK, quit_button_rect, border_radius=10)
-    if selected_button == 1:
+    if selected_button == 2:
         pygame.draw.rect(screen, RED, quit_button_rect, border_radius=10, width=4)
-    text_rect = text.get_rect()
-    text_rect.center = quit_button_rect.center
+    text_rect = text.get_rect(center=quit_button_rect.center)
     screen.blit(text, text_rect)
+
     pygame.display.flip()
     clock.tick(60)
 

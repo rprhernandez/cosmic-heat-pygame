@@ -1,0 +1,9 @@
+{
+  "move_left": 97,
+  "move_right": 100,
+  "move_up": 119,
+  "move_down": 115,
+  "shoot": 13,
+  "pause": 112,
+  "quit": 27
+}

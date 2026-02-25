@@ -6,6 +6,7 @@ import random
 from controls import move_player, move_player_with_joystick
 from classes.constants import WIDTH, HEIGHT, FPS, SHOOT_DELAY
 from functions import show_game_over, music_background
+from key_bindings import bindings
 from menu import show_menu
 
 from classes.player import Player
@@ -136,41 +137,74 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not paused:
+
+            if event.key == bindings.get("shoot") and not paused:
+
                 if bullet_counter > 0 and pygame.time.get_ticks() - last_shot_time > SHOOT_DELAY:
                     last_shot_time = pygame.time.get_ticks()
+
                     bullet = Bullet(player.rect.centerx, player.rect.top)
+
                     bullets.add(bullet)
+
                     bullet_counter -= 1
+
                 is_shooting = True
 
-            elif event.key == pygame.K_ESCAPE:
+
+            elif event.key == bindings.get("quit"):
+
                 sys.exit(0)
-            elif event.key == pygame.K_p or event.key == pygame.K_PAUSE:
+
+            elif event.key == bindings.get("pause"):
+
                 paused = not paused
+
             elif not paused:
-                if event.key == pygame.K_LEFT:
+
+                if event.key == bindings.get("move_left"):
+
                     player.move_left()
-                elif event.key == pygame.K_RIGHT:
+
+                elif event.key == bindings.get("move_right"):
+
                     player.move_right()
-                elif event.key == pygame.K_UP:
+
+                elif event.key == bindings.get("move_up"):
+
                     player.move_up()
-                elif event.key == pygame.K_DOWN:
+
+                elif event.key == bindings.get("move_down"):
+
                     player.move_down()
 
+
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_SPACE and player.original_image is not None:
+
+            if event.key == bindings.get("shoot") and player.original_image is not None:
+
                 player.image = player.original_image.copy()
+
                 is_shooting = False
+
             elif not paused:
-                if event.key == pygame.K_LEFT:
+
+                if event.key == bindings.get("move_left"):
+
                     player.stop_left()
-                elif event.key == pygame.K_RIGHT:
+
+                elif event.key == bindings.get("move_right"):
+
                     player.stop_right()
-                elif event.key == pygame.K_UP:
+
+                elif event.key == bindings.get("move_up"):
+
                     player.stop_up()
-                elif event.key == pygame.K_DOWN:
+
+                elif event.key == bindings.get("move_down"):
+
                     player.stop_down()
 
         elif event.type == pygame.JOYBUTTONDOWN:

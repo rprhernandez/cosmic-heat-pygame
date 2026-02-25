@@ -1,25 +1,31 @@
 import pygame
 from classes.constants import WIDTH, HEIGHT
+from key_bindings import bindings
 
 
 def move_player(keys, player):
-    if keys[pygame.K_LEFT]:
-        if keys[pygame.K_UP]:
+    left  = bindings.get("move_left")
+    right = bindings.get("move_right")
+    up    = bindings.get("move_up")
+    down  = bindings.get("move_down")
+
+    if keys[left]:
+        if keys[up]:
             player.move_up_left()
-        elif keys[pygame.K_DOWN]:
+        elif keys[down]:
             player.move_down_left()
         else:
             player.move_left()
-    elif keys[pygame.K_RIGHT]:
-        if keys[pygame.K_UP]:
+    elif keys[right]:
+        if keys[up]:
             player.move_up_right()
-        elif keys[pygame.K_DOWN]:
+        elif keys[down]:
             player.move_down_right()
         else:
             player.move_right()
-    elif keys[pygame.K_UP]:
+    elif keys[up]:
         player.move_up()
-    elif keys[pygame.K_DOWN]:
+    elif keys[down]:
         player.move_down()
     else:
         player.stop()
