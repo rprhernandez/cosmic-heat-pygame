@@ -773,7 +773,8 @@ while running:
             boss3_health_bar_rect.height)
         )
 
-    player_image_copy = player.image.copy()
+    hp_percent = (player_life / 200) * 100
+    player_image_copy = player.get_display_image(hp_percent)
     screen.blit(player_image_copy, player.rect)
 
     for explosion in explosions:

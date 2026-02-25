@@ -3,7 +3,7 @@
   "move_right": 100,
   "move_up": 119,
   "move_down": 115,
-  "shoot": 13,
+  "shoot": 32,
   "pause": 112,
   "quit": 27
 }
